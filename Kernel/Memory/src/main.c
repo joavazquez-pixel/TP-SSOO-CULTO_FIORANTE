@@ -1,24 +1,47 @@
-#include "memoriak-conexiones.h"
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <unistd.h>
 
-int socket_servidor;
-int puerto_escucha;
-t_config* config;
-int socket_cpu;
-t_log* logger;
-t_log_level log_level;
+int main() {
+    int err;
+    struct addrinfo hints, *memoriak_info;
 
-int main(int argc, char* argv[]) {
-    saludar("kernel");
-    obtenerConfig();
-    logger = log.create("memoriak.log", "MEMORIAK_H", true, log_level)
-    socket_servidor = inciarServidor(puerto_escucha);
-    socket_cpu=esperarConexion(socket_servidor);
-    log_info(logger,"se conecto la cpu")
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_PASSIVE;  // 🔑 importante para servidor
+
+    // NULL = escuchar en cualquier IP local
+    err = getaddrinfo(NULL, "4444", &hints, &memoriak_info);
+    if (err != 0) {
+        printf("Error en getaddrinfo\n");
+        return 1;
+    }
+
+    int fd = socket(memoriak_info->ai_family,
+                    memoriak_info->ai_socktype,
+                    memoriak_info->ai_protocol);
+
+    // 🔑 Asociar socket al puerto
+    if (bind(fd, memoriak_info->ai_addr, memoriak_info->ai_addrlen) == -1) {
+        perror("bind");
+        return 1;
+    }
+
+    // 🔑 Escuchar conexiones
+    listen(fd, SOMAXCONN);
+
+    printf("Servidor escuchando...\n");
+
+    // 🔑 Aceptar cliente
+    int cpu_fd = accept(fd, NULL, NULL);
+
+    printf("cpu conectado\n");
+
+    freeaddrinfo(memoriak_info);
+    close(cpu_fd);
+    close(fd);
     return 0;
-}
-
-void obtenerConfig(){
-    config=config_create("memoriak.config");
-    puerto_escucha=config_get_int_value(config,"PUERTO_ESCUCHA");
-    log_level= log_level_from_string(config_get_string_value(config,"LOG_LEVEL"));,
 }
