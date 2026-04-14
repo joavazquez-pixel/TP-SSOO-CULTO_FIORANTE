@@ -8,6 +8,8 @@ int socket_servidor_MEMORIA;
 // int socket_cliente_KERNEL;
 int socket_cliente_CPU;
  
+
+
  int main(int argc, char *argv[])
 {
    

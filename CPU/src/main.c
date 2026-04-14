@@ -1,4 +1,13 @@
     
+#include "mainCPU.h"
+
+t_config *config;
+t_log *logger;
+int socket_memoria;
+int socket_kernel_dispach;
+int socket_kernel_interrup;
+
+
 int conectar_con_MEMORIA(char *ip, char *puerto, char *servidor);
 void iniciar_conexiones();
 
