@@ -1,4 +1,14 @@
-   int main(int argc, char *argv[])
+ 
+ #include "mainMemoria.h"
+ 
+t_config *config;
+t_log *logger;
+
+int socket_servidor_MEMORIA;
+// int socket_cliente_KERNEL;
+int socket_cliente_CPU;
+ 
+ int main(int argc, char *argv[])
 {
    
    
@@ -17,7 +27,7 @@ void iniciar_conexiones()
     socket_servidor_MEMORIA = iniciar_servidor(puerto_escucha);
 
     socket_cliente_CPU = esperar_cliente(socket_servidor_MEMORIA, "CPU");
-    
+
 }
 
 void atender_KERNEL()

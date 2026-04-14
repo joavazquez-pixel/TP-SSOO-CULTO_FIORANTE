@@ -1,3 +1,27 @@
+
+/*
+#include <stdlib.h>
+#include <stdio.h>
+#include <commons/config.h>
+#include <commons/log.h>
+#include <utils/loggin.h>
+#include <utils/conexiones.h>
+#include <utils/serializacion.h>
+#include <utils/desserializar.h>
+#include <semaphore.h>
+#include <stdint.h>
+#include <pthread.h>
+*/
+
+
+t_config *config;
+t_log *logger;
+
+int socket_cpu_dispatch;
+int socket_cpu_interrupt;
+int socket_memoria;
+
+
 void iniciar_conexiones_con_CPU_y_MEMORIA()
 
 
